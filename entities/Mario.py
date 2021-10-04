@@ -58,8 +58,9 @@ class Mario(EntityBase):
         self.restart = False
         self.pause = False
         self.pauseObj = Pause(screen, self, dashboard)
+        self.touches = []
 
-    def update(self):
+    def update(self, current_touches):
         if self.invincibilityFrames > 0:
             self.invincibilityFrames -= 1
         self.updateTraits()
@@ -67,7 +68,7 @@ class Mario(EntityBase):
         self.camera.move()
         self.applyGravity()
         self.checkEntityCollision()
-        self.input.checkForInput()
+        self.input.checkForInput(current_touches)
 
     def moveMario(self):
         self.rect.y += self.vel.y
