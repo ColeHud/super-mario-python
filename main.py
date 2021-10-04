@@ -7,14 +7,14 @@ from entities.Mario import Mario
 import cv2
 import math
 
-camera_port = 1
+camera_port = 0
 camera = cv2.VideoCapture(camera_port)
 
 max_value = 255
 max_value_H = 360//2
 low_H = 0
 low_S = 0
-low_V = 64
+low_V = 80
 high_H = max_value_H
 high_S = max_value
 high_V = max_value
@@ -184,7 +184,7 @@ def main():
 
     mario = Mario(0, 0, level, screen, dashboard, sound)
     clock = pygame.time.Clock()
-    
+
     while not mario.restart:
         touches = touchscreen()
         # print("Len Touches "+ str(len(touches)))

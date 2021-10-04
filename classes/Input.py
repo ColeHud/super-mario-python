@@ -9,6 +9,8 @@ class Input:
         self.mouseY = 0
         self.entity = entity
         self.previous_touches = [[0,0]]
+        self.swipe_count = 0
+        self.swiping = False
 
     def checkForInput(self, current_touches):
         events = pygame.event.get()
@@ -29,6 +31,13 @@ class Input:
         if len(current_touches) == 2:
             shift = True
 
+        if self.swiping == True:
+            self.swipe_count = self.swipe_count + 1
+
+        if self.swipe_count > 30:
+            self.swiping = False
+            self.swipe_count = 0
+
         if len(current_touches) <= 2:
             for touch in current_touches:
                 x = touch[0]
@@ -43,13 +52,15 @@ class Input:
                 #    jump = True
                 
                  
-                if len(self.previous_touches) == 1 and len(current_touches) == 1:
+                if len(self.previous_touches) == 1 and len(current_touches) == 1 and self.swiping:
                     if current_touches[0][1] - self.previous_touches[0][1] > 50:
                         jump = True
-                    if self.previous_touches[0][1] - current_touches[0][1] > 50:
+                    if self.previous_touches[0][1] - current_touches[0][1] > 50 and self.swiping:
                         jump = True
 
-                self.previous_touches = current_touches
+                if len(current_touches) == 1:
+                    self.swiping = True
+                    self.previous_touches = current_touches
                 
         elif len(current_touches) == 3:
             menu = True
@@ -62,7 +73,6 @@ class Input:
         self.entity.traits["goTrait"].direction = direction
         self.entity.traits['goTrait'].boost = shift
         self.entity.traits['jumpTrait'].jump(jump)
-        print(jump)
 
         #print("Dir " + str(direction))
         # pressedKeys = pygame.key.get_pressed()
