@@ -16,7 +16,7 @@ class Level:
     def __init__(self, screen, sound, dashboard):
         self.sprites = Sprites()
         self.dashboard = dashboard
-        self.sound = sound
+        #self.sound = sound
         self.screen = screen
         self.level = None
         self.levelLength = 0

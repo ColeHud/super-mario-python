@@ -77,13 +77,12 @@ class Menu:
                     self.music = False
                 if data["sfx"]:
                     self.sfx = True
-                    self.sound.allowSFX = True
+                    
                 else:
-                    self.sound.allowSFX = False
+                    
                     self.sfx = False
         except (IOError, OSError):
             self.music = False
-            self.sound.allowSFX = False
             self.sfx = False
             self.saveSettings("./settings.json")
 
@@ -254,10 +253,8 @@ class Menu:
                             self.saveSettings("./settings.json")
                         elif self.state == 1:
                             if self.sfx:
-                                self.sound.allowSFX = False
                                 self.sfx = False
                             else:
-                                self.sound.allowSFX = True
                                 self.sfx = True
                             self.saveSettings("./settings.json")
                         elif self.state == 2:
