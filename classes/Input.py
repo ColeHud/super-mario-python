@@ -24,19 +24,29 @@ class Input:
         jump = False
         special = False
 
-        if len(current_touches) == 1:
-            if current_touches[0][0] < 500: #move left
-                direction = -1
-            elif current_touches[0][0] > 800: #move right
-                direction = 1
-            else: #don't move
-                direction = 0
+        if len(current_touches) < 3:
+            for touch in current_touches:
+                x = touch[0]
+                y = touch[1]
+                if(y < 250):
+                    if x < 300: #move left
+                        direction = -1
+                    elif x >= 300: #move right
+                        direction = 1
+    
+                elif(y >= 250):
+                    jump = True
+                
+                
 
+                '''
                 if len(previous_touches) == 1:
                     if current_touches[0][1] - previous_touches[0][1] > 50:
                         jump = True
                     if previous_touches[0][1] - current_touches[0][1] > 50:
                         special = True
+                '''
+                
         elif len(current_touches) == 3:
             menu = True
         elif len(current_touches) == 4:
@@ -45,10 +55,13 @@ class Input:
         #should we boost?
         if len(current_touches) == 2:
             shift = True
+            jump = True
 
         self.entity.traits["goTrait"].direction = direction
         self.entity.traits['goTrait'].boost = shift
-
+        self.entity.traits['jumpTrait'].jump(jump)
+        print(jump)
+        #print("Dir " + str(direction))
         # pressedKeys = pygame.key.get_pressed()
 
         """
@@ -60,7 +73,7 @@ class Input:
             self.entity.traits['goTrait'].direction = 0
         """
         #isJumping = pressedKeys[K_SPACE] or pressedKeys[K_UP] or pressedKeys[K_k]
-        #self.entity.traits['jumpTrait'].jump(isJumping)
+        
 
 
     def checkForMouseInput(self, events):

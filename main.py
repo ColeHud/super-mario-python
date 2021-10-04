@@ -103,8 +103,9 @@ def touchscreen():
     if frame is None:
         print("No frame")
         cv2.destroyAllWindows()
-        return
-
+        return []
+    
+    current_touches = []
     #Convert image to HSV
     frame_HSV = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
@@ -145,12 +146,6 @@ def touchscreen():
 
     return current_touches
 
-    #Break upon pressing 'q' key
-    key = cv2.waitKey(30)
-    if key == ord('q') or key == 27:
-        cv2.destroyAllWindows()
-        print("end")
-        return
 
 
 windowSize = 640, 480
@@ -162,7 +157,7 @@ def main():
     screen = pygame.display.set_mode(windowSize)
     max_frame_rate = 60
     dashboard = Dashboard("./img/font.png", 8, screen)
-    sound = Sound()
+    sound = None#Sound()
     level = Level(screen, sound, dashboard)
     menu = Menu(screen, dashboard, level, sound)
 
@@ -190,6 +185,7 @@ def main():
 
     while not mario.restart:
         touches = touchscreen()
+        # print("Len Touches "+ str(len(touches)))
 
         pygame.display.set_caption("Super Mario running with {:d} FPS".format(int(clock.get_fps())))
         if mario.pause:
