@@ -29,8 +29,8 @@ high_V_name = 'High V'
 
 low_ellipse_area_name = 'Low Area'
 high_ellipse_area_name = 'High Area'
-max_ellipse_area = 15000
-low_ellipse_area = 0
+max_ellipse_area = 40000
+low_ellipse_area = 10000
 high_ellipse_area = max_ellipse_area
 
 
@@ -119,6 +119,7 @@ def touchscreen():
     contours, _ = cv2.findContours(frame_threshold, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
     #Create ellipse for each valid contour on original image
+#Create ellipse for each valid contour on original image
     for cnt in contours:
         if(len(cnt) >= 5):
             ((centx,centy), (width,height), angle) = cv2.fitEllipse(cnt)
@@ -128,9 +129,10 @@ def touchscreen():
 
                 #Compute Area of ellipse
                 area = math.pi * width * height
+                ratio = width / height
 
                 #Plot ellipse and center point of ellipse if fingerprint sized ellipse
-                if(area >= low_ellipse_area and area <= high_ellipse_area):
+                if(area >= low_ellipse_area and area <= high_ellipse_area and ratio < 1.0 and ratio > 0.3):
                     centx = int(centx)
                     centy = int(centy)
                     cv2.ellipse(frame, (centx,centy), (int(width/2),int(height/2)), angle, 0, 360, (0,0,255), 1)
@@ -182,7 +184,7 @@ def main():
 
     mario = Mario(0, 0, level, screen, dashboard, sound)
     clock = pygame.time.Clock()
-
+    
     while not mario.restart:
         touches = touchscreen()
         # print("Len Touches "+ str(len(touches)))

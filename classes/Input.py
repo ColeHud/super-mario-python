@@ -8,6 +8,7 @@ class Input:
         self.mouseX = 0
         self.mouseY = 0
         self.entity = entity
+        self.previous_touches = [[0,0]]
 
     def checkForInput(self, current_touches):
         events = pygame.event.get()
@@ -24,43 +25,45 @@ class Input:
         jump = False
         special = False
 
-        if len(current_touches) < 3:
+        #should we boost?
+        if len(current_touches) == 2:
+            shift = True
+
+        if len(current_touches) <= 2:
             for touch in current_touches:
                 x = touch[0]
                 y = touch[1]
-                if(y < 250):
+                if(y < 500):
                     if x < 300: #move left
                         direction = -1
-                    elif x >= 300: #move right
+                    elif x >= 800: #move right
                         direction = 1
     
-                elif(y >= 250):
-                    jump = True
+                #elif(y >= 500):
+                #    jump = True
                 
-                
-
-                '''
-                if len(previous_touches) == 1:
-                    if current_touches[0][1] - previous_touches[0][1] > 50:
+                 
+                if len(self.previous_touches) == 1 and len(current_touches) == 1:
+                    if current_touches[0][1] - self.previous_touches[0][1] > 50:
                         jump = True
-                    if previous_touches[0][1] - current_touches[0][1] > 50:
-                        special = True
-                '''
+                    if self.previous_touches[0][1] - current_touches[0][1] > 50:
+                        jump = True
+
+                self.previous_touches = current_touches
                 
         elif len(current_touches) == 3:
             menu = True
         elif len(current_touches) == 4:
             select = True
+            self.entity.pause = True
+            self.entity.pauseObj.createBackgroundBlur()
 
-        #should we boost?
-        if len(current_touches) == 2:
-            shift = True
-            jump = True
 
         self.entity.traits["goTrait"].direction = direction
         self.entity.traits['goTrait'].boost = shift
         self.entity.traits['jumpTrait'].jump(jump)
         print(jump)
+
         #print("Dir " + str(direction))
         # pressedKeys = pygame.key.get_pressed()
 
